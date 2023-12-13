@@ -1,8 +1,9 @@
-
+#include <algorithm>
 #include <vector>
 #include <iostream>
 
 using namespace std;
+
 
 
 
@@ -71,6 +72,32 @@ int main()
     PigeonholeSort(array);
     std::cout << "\nArray after Pigeonhole Sort: " << std::endl;
     PrintArray(array);
+
+    //Gnome Sort
+    GnomeSort(array);
+    std::cout << "\nArray after Gnome Sort: " << std::endl;
+        PrintArray(array);
+
+
+      //Comb Sort
+      CombSort(array);
+     std::cout << "\nArray after Comb Sort: " << std::endl;
+      PrintArray(array);
+
+      //Selection Sort
+      SelectionSort(array);
+      std::cout << "\nArray after Selection Sort: " << std::endl;
+      PrintArray(array);
+
+      //Selection Sort
+      HeapSort(array);
+      std::cout << "\nArray after Heap Sort: " << std::endl;
+      PrintArray(array);
+
+      //Selection Sort
+      SelectionSort(array);
+      std::cout << "\nArray after Heap Sort: " << std::endl;
+      PrintArray(array);
 
     return 0;
 
@@ -381,3 +408,120 @@ void PigeonholeSort(vector<int>& array) {
         }
     }
 }
+
+void Swap(int arr[], int a, int b) {
+    int temp = arr[a];
+    arr[a] = arr[b];
+    arr[b] = temp;
+}
+
+
+
+// Implementación de GnomeSort
+void GnomeSort(int arr[], int n) {
+    int index = 0;
+
+    while (index < n) {
+        if (index == 0) {
+            index++;
+        }
+
+        if (arr[index] >= arr[index - 1]) {
+            index++;
+        }
+        else {
+            Swap(arr, index, index - 1);
+            index--;
+        }
+    }
+}
+
+// Implementación de CombSort
+void CombSort(int arr[], int n) {
+    int gap = n;
+    bool swapped = true;
+
+    while (gap > 1 || swapped) {
+        gap = max(1, static_cast<int>(gap / 1.3));
+        swapped = false;
+
+        for (int i = 0; i < n - gap; i++) {
+            if (arr[i] > arr[i + gap]) {
+                Swap(arr, i, i + gap);
+                swapped = true;
+            }
+        }
+    }
+}
+
+// Implementación de SelectionSort
+void SelectionSort(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        int minIndex = i;
+
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
+            }
+        }
+
+        Swap(arr, i, minIndex);
+    }
+}
+
+// Función de ayuda para Heapify
+void Heapify(int arr[], int n, int i) {
+    int largest = i;
+    int leftChild = 2 * i + 1;
+    int rightChild = 2 * i + 2;
+
+    if (leftChild < n && arr[leftChild] > arr[largest]) {
+        largest = leftChild;
+    }
+
+    if (rightChild < n && arr[rightChild] > arr[largest]) {
+        largest = rightChild;
+    }
+
+    if (largest != i) {
+        Swap(arr, i, largest);
+        Heapify(arr, n, largest);
+    }
+}
+
+// Implementación de HeapSort
+void HeapSort(int arr[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        Heapify(arr, n, i);
+    }
+
+    for (int i = n - 1; i > 0; i--) {
+        Swap(arr, 0, i);
+        Heapify(arr, i, 0);
+    }
+}
+
+// Implementación de CountingSort
+void CountingSort(int arr[], int n) {
+    int max = arr[0];
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+
+    int count[max + 1] = { 0 };
+
+    for (int i = 0; i < n; i++) {
+        count[arr[i]]++;
+    }
+
+    int index = 0;
+    for (int i = 0; i <= max; i++) {
+        while (count[i] > 0) {
+            arr[index++] = i;
+            count[i]--;
+        }
+    }
+}
+
